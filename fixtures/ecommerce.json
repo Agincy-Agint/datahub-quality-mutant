@@ -1,0 +1,75 @@
+{
+  "as_of": "2026-08-07T12:00:00+00:00",
+  "target_dataset": "orders",
+  "datasets": [
+    {
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:duckdb,showcase.customers,PROD)",
+      "name": "customers",
+      "table": "customers",
+      "tags": ["Production", "CustomerData"],
+      "terms": ["Customer"],
+      "primary_key": ["customer_id"],
+      "foreign_keys": [],
+      "fields": [
+        {"name": "customer_id", "type": "BIGINT", "nullable": false, "terms": ["CustomerId"]},
+        {"name": "email", "type": "VARCHAR", "nullable": false, "tags": ["PII"], "terms": ["EmailAddress"]},
+        {"name": "segment", "type": "VARCHAR", "nullable": false, "terms": ["CustomerSegment"]}
+      ],
+      "rows": [
+        {"customer_id": 101, "email": "alice@example.test", "segment": "consumer"},
+        {"customer_id": 102, "email": "bob@example.test", "segment": "business"},
+        {"customer_id": 103, "email": "carol@example.test", "segment": "consumer"}
+      ],
+      "assertions": [],
+      "contract": null
+    },
+    {
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:duckdb,showcase.orders,PROD)",
+      "name": "orders",
+      "table": "orders",
+      "tags": ["Production", "Tier1"],
+      "terms": ["Order", "NetRevenue"],
+      "primary_key": ["order_id"],
+      "foreign_keys": [
+        {
+          "name": "orders_customer_fk",
+          "field": "customer_id",
+          "target_dataset": "customers",
+          "target_field": "customer_id"
+        }
+      ],
+      "fields": [
+        {"name": "order_id", "type": "BIGINT", "nullable": false, "terms": ["OrderId"]},
+        {"name": "customer_id", "type": "BIGINT", "nullable": false, "terms": ["CustomerId"]},
+        {"name": "status", "type": "VARCHAR", "nullable": false, "terms": ["OrderStatus"]},
+        {"name": "amount", "type": "DOUBLE", "nullable": false, "terms": ["NetRevenue"]},
+        {"name": "updated_at", "type": "TIMESTAMPTZ", "nullable": false, "terms": ["LastUpdatedAt"]}
+      ],
+      "rows": [
+        {"order_id": 5001, "customer_id": 101, "status": "placed", "amount": 125.5, "updated_at": "2026-08-07T10:00:00+00:00"},
+        {"order_id": 5002, "customer_id": 102, "status": "shipped", "amount": 210.0, "updated_at": "2026-08-07T09:30:00+00:00"},
+        {"order_id": 5003, "customer_id": 103, "status": "completed", "amount": 79.99, "updated_at": "2026-08-06T18:00:00+00:00"}
+      ],
+      "assertions": [
+        {"id": "orders.order_id.not_null", "kind": "not_null", "dataset": "orders", "field": "order_id"},
+        {"id": "orders.order_id.unique", "kind": "unique", "dataset": "orders", "field": "order_id"},
+        {"id": "orders.customer_id.not_null", "kind": "not_null", "dataset": "orders", "field": "customer_id"},
+        {"id": "orders.status.accepted", "kind": "accepted_values", "dataset": "orders", "field": "status", "values": ["placed", "shipped", "completed"]},
+        {"id": "orders.amount.range", "kind": "range", "dataset": "orders", "field": "amount", "minimum": 0, "maximum": 10000},
+        {"id": "orders.updated_at.fresh", "kind": "freshness", "dataset": "orders", "field": "updated_at", "max_age_hours": 48}
+      ],
+      "contract": {
+        "id": "orders-quality-contract-v1",
+        "assertion_ids": [
+          "orders.order_id.not_null",
+          "orders.order_id.unique",
+          "orders.customer_id.not_null",
+          "orders.status.accepted",
+          "orders.amount.range",
+          "orders.updated_at.fresh"
+        ]
+      }
+    }
+  ]
+}
+

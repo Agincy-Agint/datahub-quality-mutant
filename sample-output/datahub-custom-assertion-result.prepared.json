@@ -1,0 +1,79 @@
+{
+  "assertion_urn": "urn:li:assertion:quality-mutant-a3d530565b70dade5e48",
+  "declared_threshold": 1.0,
+  "delivery_status": "PREPARED_NOT_SENT",
+  "observed_score": 0.8333333333333334,
+  "operations": [
+    {
+      "operation_name": "UpsertQualityMutationCoverage",
+      "query": "mutation UpsertQualityMutationCoverage($urn: String!, $input: UpsertCustomAssertionInput!) {\n  upsertCustomAssertion(urn: $urn, input: $input) { urn }\n}",
+      "variables": {
+        "input": {
+          "aggregation": "IDENTITY",
+          "description": "Fraction of non-equivalent adversarial data mutants detected by the dataset's executable assertion set.",
+          "entityUrn": "urn:li:dataset:(urn:li:dataPlatform:duckdb,showcase.orders,PROD)",
+          "nativeParameters": [
+            {
+              "key": "threshold",
+              "value": "1.0"
+            },
+            {
+              "key": "report_hash",
+              "value": "a3d530565b70dade5e48eca398ed9c58e369bc31e231367fccfc7b2256d3dbf5"
+            }
+          ],
+          "nativeType": "quality_mutation_score",
+          "operator": "GREATER_THAN_OR_EQUAL_TO",
+          "parameters": {
+            "value": {
+              "type": "NUMBER",
+              "value": "1.0"
+            }
+          },
+          "platform": {
+            "name": "datahub-quality-mutant"
+          },
+          "scope": "DATASET_ROWS",
+          "type": "Quality Mutation Coverage"
+        },
+        "urn": "urn:li:assertion:quality-mutant-a3d530565b70dade5e48"
+      }
+    },
+    {
+      "operation_name": "ReportQualityMutationCoverage",
+      "query": "mutation ReportQualityMutationCoverage($urn: String!, $result: AssertionResultInput!) {\n  reportAssertionResult(urn: $urn, result: $result)\n}",
+      "variables": {
+        "result": {
+          "properties": [
+            {
+              "key": "mutation_score",
+              "value": "0.833333"
+            },
+            {
+              "key": "threshold",
+              "value": "1.0"
+            },
+            {
+              "key": "killed",
+              "value": "5"
+            },
+            {
+              "key": "survived",
+              "value": "1"
+            },
+            {
+              "key": "report_hash",
+              "value": "a3d530565b70dade5e48eca398ed9c58e369bc31e231367fccfc7b2256d3dbf5"
+            }
+          ],
+          "timestampMillis": 1786104000000,
+          "type": "FAILURE"
+        },
+        "urn": "urn:li:assertion:quality-mutant-a3d530565b70dade5e48"
+      }
+    }
+  ],
+  "result_type": "FAILURE",
+  "transport": "DataHub GraphQL API",
+  "warning": "This file is inert. Quality Mutant never sends it."
+}

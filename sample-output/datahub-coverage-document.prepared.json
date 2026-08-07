@@ -1,0 +1,19 @@
+{
+  "arguments": {
+    "content": "# Quality mutation coverage: orders\n\n**Result:** 5/6 non-equivalent mutants killed (83.3%); threshold 100.0% not met.\n\nThe baseline passed before mutation. Unsupported live assertion semantics are shown as `NOT_EXECUTED`; they are never counted as passing.\n\n## Operator kill matrix\n\n| Operator | Result | Killed by | Mutant hash |\n|---|---|---|---|\n| `null` | KILLED | orders.order_id.not_null, orders.order_id.unique | `155ffab86d872972` |\n| `duplicate` | KILLED | orders.order_id.unique | `fa14006ee21277e0` |\n| `orphan_fk` | SURVIVED | \u2014 | `e2b63ed3b44ca8e9` |\n| `enum` | KILLED | orders.status.accepted | `12121f4d48555be5` |\n| `boundary_extreme` | KILLED | orders.amount.range | `d22a0c763f60acf6` |\n| `stale_timestamp` | KILLED | orders.updated_at.fresh | `b65cd40f48556cb8` |\n\n## Surviving counterexamples\n\n- `orphan_fk` survived. Suggested `foreign_key` check: The field remained non-null but pointed to no parent row.\n\n```sql\nSELECT count(*) FROM orders s LEFT JOIN customers t ON s.customer_id=t.customer_id WHERE s.customer_id IS NOT NULL AND t.customer_id IS NULL\n```\n\n## Evidence\n\n- Fixture/catalog hash: `c5a40f0ddf90304a641147c50af36a4d331decc1d4e491a8e0db41c1984e33da`\n- Report hash: `a3d530565b70dade5e48eca398ed9c58e369bc31e231367fccfc7b2256d3dbf5`\n- Source: `fixture:ecommerce.json`\n- Evaluated at fixed timestamp: `2026-08-07T12:00:00+00:00`\n- Writeback state: **prepared, not sent**\n",
+    "document_type": "Analysis",
+    "related_assets": [
+      "urn:li:dataset:(urn:li:dataPlatform:duckdb,showcase.orders,PROD)"
+    ],
+    "title": "Quality mutation coverage: orders",
+    "topics": [
+      "data-quality",
+      "mutation-testing",
+      "quality-mutant"
+    ]
+  },
+  "delivery_status": "PREPARED_NOT_SENT",
+  "tool": "save_document",
+  "transport": "official DataHub MCP tool",
+  "warning": "This file is inert. Quality Mutant never calls save_document."
+}

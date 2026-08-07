@@ -1,0 +1,182 @@
+{
+  "as_of": "2026-08-07T12:00:00+00:00",
+  "baseline": {
+    "checks": [
+      {
+        "assertion_id": "orders.order_id.not_null",
+        "observed": "null_count=0",
+        "status": "PASS"
+      },
+      {
+        "assertion_id": "orders.order_id.unique",
+        "observed": "rows=3;distinct=3",
+        "status": "PASS"
+      },
+      {
+        "assertion_id": "orders.customer_id.not_null",
+        "observed": "null_count=0",
+        "status": "PASS"
+      },
+      {
+        "assertion_id": "orders.status.accepted",
+        "observed": "unexpected_count=0",
+        "status": "PASS"
+      },
+      {
+        "assertion_id": "orders.amount.range",
+        "observed": "out_of_range_count=0",
+        "status": "PASS"
+      },
+      {
+        "assertion_id": "orders.updated_at.fresh",
+        "observed": "age_hours=2.000",
+        "status": "PASS"
+      }
+    ],
+    "executable": 6,
+    "not_executed": 0,
+    "status": "PASS"
+  },
+  "fixture_hash": "c5a40f0ddf90304a641147c50af36a4d331decc1d4e491a8e0db41c1984e33da",
+  "format_version": "quality-mutant-report/v1",
+  "kill_matrix": [
+    {
+      "checks": {
+        "orders.amount.range": "PASS",
+        "orders.customer_id.not_null": "PASS",
+        "orders.order_id.not_null": "FAIL",
+        "orders.order_id.unique": "FAIL",
+        "orders.status.accepted": "PASS",
+        "orders.updated_at.fresh": "PASS"
+      },
+      "description": "Set order_id to NULL",
+      "equivalent": false,
+      "killed": true,
+      "killed_by": [
+        "orders.order_id.not_null",
+        "orders.order_id.unique"
+      ],
+      "mutant_hash": "155ffab86d872972a43f89a868ede8a443b093aff8a1bdd1c22dd9020617c5d0",
+      "operator": "null"
+    },
+    {
+      "checks": {
+        "orders.amount.range": "PASS",
+        "orders.customer_id.not_null": "PASS",
+        "orders.order_id.not_null": "PASS",
+        "orders.order_id.unique": "FAIL",
+        "orders.status.accepted": "PASS",
+        "orders.updated_at.fresh": "PASS"
+      },
+      "description": "Duplicate a row while preserving order_id=5001",
+      "equivalent": false,
+      "killed": true,
+      "killed_by": [
+        "orders.order_id.unique"
+      ],
+      "mutant_hash": "fa14006ee21277e0b9778bb22d56b42e3dade30de4bbb921eda1412cdde94d72",
+      "operator": "duplicate"
+    },
+    {
+      "checks": {
+        "orders.amount.range": "PASS",
+        "orders.customer_id.not_null": "PASS",
+        "orders.order_id.not_null": "PASS",
+        "orders.order_id.unique": "PASS",
+        "orders.status.accepted": "PASS",
+        "orders.updated_at.fresh": "PASS"
+      },
+      "description": "Point customer_id at a missing customers row",
+      "equivalent": false,
+      "killed": false,
+      "killed_by": [],
+      "mutant_hash": "e2b63ed3b44ca8e9ecaf74e224a2079ac736f962d766d1c7d7895576a0b247f0",
+      "operator": "orphan_fk"
+    },
+    {
+      "checks": {
+        "orders.amount.range": "PASS",
+        "orders.customer_id.not_null": "PASS",
+        "orders.order_id.not_null": "PASS",
+        "orders.order_id.unique": "PASS",
+        "orders.status.accepted": "FAIL",
+        "orders.updated_at.fresh": "PASS"
+      },
+      "description": "Set status to a value outside the declared enumeration",
+      "equivalent": false,
+      "killed": true,
+      "killed_by": [
+        "orders.status.accepted"
+      ],
+      "mutant_hash": "12121f4d48555be52b02b0ab7962d3757f1b7836f46a54196dd2a1126f7c8fc8",
+      "operator": "enum"
+    },
+    {
+      "checks": {
+        "orders.amount.range": "FAIL",
+        "orders.customer_id.not_null": "PASS",
+        "orders.order_id.not_null": "PASS",
+        "orders.order_id.unique": "PASS",
+        "orders.status.accepted": "PASS",
+        "orders.updated_at.fresh": "PASS"
+      },
+      "description": "Push amount beyond its declared numeric boundary",
+      "equivalent": false,
+      "killed": true,
+      "killed_by": [
+        "orders.amount.range"
+      ],
+      "mutant_hash": "d22a0c763f60acf616ce15f6705beec61bfcc596c0114969620e4a1d10b270c3",
+      "operator": "boundary_extreme"
+    },
+    {
+      "checks": {
+        "orders.amount.range": "PASS",
+        "orders.customer_id.not_null": "PASS",
+        "orders.order_id.not_null": "PASS",
+        "orders.order_id.unique": "PASS",
+        "orders.status.accepted": "PASS",
+        "orders.updated_at.fresh": "FAIL"
+      },
+      "description": "Move every updated_at value far outside the freshness window",
+      "equivalent": false,
+      "killed": true,
+      "killed_by": [
+        "orders.updated_at.fresh"
+      ],
+      "mutant_hash": "b65cd40f48556cb808493c6782f0518a5d273f8793a6fbfab91e860315e407ec",
+      "operator": "stale_timestamp"
+    }
+  ],
+  "mutation_summary": {
+    "counted": 6,
+    "equivalent_excluded": 0,
+    "generated": 6,
+    "killed": 5,
+    "requested_operators": 6,
+    "score": 0.8333333333333334,
+    "survived": 1,
+    "threshold": 1.0,
+    "threshold_met": false
+  },
+  "report_hash": "a3d530565b70dade5e48eca398ed9c58e369bc31e231367fccfc7b2256d3dbf5",
+  "source": "fixture:ecommerce.json",
+  "survivors": [
+    {
+      "mutant_hash": "e2b63ed3b44ca8e9ecaf74e224a2079ac736f962d766d1c7d7895576a0b247f0",
+      "operator": "orphan_fk",
+      "suggestion": {
+        "dataset": "orders",
+        "field": "customer_id",
+        "kind": "foreign_key",
+        "minimal_sql": "SELECT count(*) FROM orders s LEFT JOIN customers t ON s.customer_id=t.customer_id WHERE s.customer_id IS NOT NULL AND t.customer_id IS NULL",
+        "rationale": "The field remained non-null but pointed to no parent row.",
+        "target_dataset": "customers",
+        "target_field": "customer_id"
+      }
+    }
+  ],
+  "target_dataset": "orders",
+  "target_urn": "urn:li:dataset:(urn:li:dataPlatform:duckdb,showcase.orders,PROD)",
+  "unavailable_operators": []
+}
